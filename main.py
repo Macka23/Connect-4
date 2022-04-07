@@ -26,6 +26,7 @@ surf_square_select.set_colorkey((0, 0, 0))
 # Red square positions
 square_red_x, square_red_y = 100, 100
 
+
 # Function that creates the map
 def creating_map(connector_to_process):
     not_empty = 0
@@ -46,11 +47,11 @@ def creating_map(connector_to_process):
                             if t.type == QUIT:
                                 quit()
 
-                        font = pygame.font.Font('ARCADECLASSIC.TTF', 64)
+                        pol = pygame.font.Font('ARCADECLASSIC.TTF', 64)
 
-                        text = font.render('No    one    has    won', True, orange)
+                        txet = pol.render('No    one    has    won', True, orange)
 
-                        background.blit(text, (100, 800))
+                        background.blit(txet, (100, 800))
                         screen_surface.blit(background, (0, 0))
                         pygame.display.update()
                 if x == 1:
@@ -91,9 +92,10 @@ def check_4win(ye, num):
                     return True
 
 
-def turn_player(posx, posy, matrix):  # Put the coin at the right place and check if someone won
+def turn_player(posx, posy, map_connect):  # Put the coin at the right place and check if someone won
     global alternate, count, check
     n = 6
+    orange = 255, 165, 0
     while True:  # Check each time if you can put your coin there
         n -= 1
         x = int(posx / 100) - 1
@@ -105,48 +107,55 @@ def turn_player(posx, posy, matrix):  # Put the coin at the right place and chec
             alternate -= 1
             break
 
-        if matrix[y][x] == 0:
+        if map_connect[y][x] == 0:
             pygame.display.set_caption("")
             if chose == 1:
                 count = 1
-                matrix[y][x] += 2
+                map_connect[y][x] += 2
             else:
                 count = 0
-                matrix[y][x] += 1
-            creating_map(matrix)
-            if check_4win(matrix, matrix[y][x]):
+                map_connect[y][x] += 1
+            creating_map(map_connect)
+            if check_4win(map_connect, map_connect[y][x]):
                 while True:
                     for evnt in pygame.event.get():
                         if evnt.type == QUIT:
                             quit()
 
-                    key = pygame.key.get_pressed()
-                    font = pygame.font.Font('ARCADECLASSIC.TTF', 64)
+                    k = pygame.key.get_pressed()
+                    police = pygame.font.Font('ARCADECLASSIC.TTF', 64)
 
                     if chose == 1:
-                        text = font.render('Yellow   Player    Won!', True, yellow)
+                        win_play = police.render('Yellow   Player    Won!', True, yellow)
                     else:
-                        text = font.render('Red   Player    Won!', True, red)
+                        win_play = police.render('Red   Player    Won!', True, red)
 
-                    if key[K_RETURN]:
+                    if k[K_RETURN]:
                         check = 0
                         break
 
-                    text2 = font.render('Press   ENTER  to  restart', True, yellow)
-                    background.blit(text2, (700, 700))
-                    background.blit(text, (100, 800))
+                    restart = font.render('Press   ENTER  to  restart', True, orange)
+                    background.blit(restart, (700, 700))
+                    background.blit(win_play, (100, 800))
                     screen_surface.blit(background, (0, 0))
                     pygame.display.update()
             break
         else:
             pass
 
+
 while True:
     alternate = 0
     count = 0
     check = 1
     screen_surface.fill(black)
-    matrix = [[0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]]
+    matrix = [[0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0]]
+
     background.fill(black)
     creating_map(matrix)
     while True:
@@ -214,5 +223,3 @@ while True:
         screen_surface.blit(surf_square_select, (0, 0))
         clock.tick(10)  # Setting game speed (FPS)
         pygame.display.flip()
-
-
